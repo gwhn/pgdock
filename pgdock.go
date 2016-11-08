@@ -15,14 +15,18 @@ func main() {
 //postgres://postgres:1234@localhost/test_pg?sslmode=verify-full
 func defaultHandler(w http.ResponseWriter, _ *http.Request) {
 	fmt.Fprintln(w, "connecting to postgres")
-	db, err := sql.Open("postgres", "user=postgres password=1234 dbname=postgres host=test-pg sslmode=disable")
+	db, err := sql.Open(
+		"postgres", 
+		"user=postgres password=1234 dbname=test_db host=pg_db sslmode=disable")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer db.Close()
 	fmt.Fprintln(w, "running query")
-	rows, err := db.Query("select id, recipe_name, category_name from recipes_with_category")
+	rows, err := db.Query(`select r.id, r.name, c.name 
+		from recipes r, categories c 
+		where r.category_id=c.id`)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
