@@ -1,0 +1,16 @@
+version: '2'
+services:
+  go_web:
+    build: .
+    ports:
+    - 6060:8080
+    depends_on:
+    - pg_db
+    links:
+    - pg_db
+  pg_db:
+    image: gwhn/postgres:dev
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_PASSWORD=1234
