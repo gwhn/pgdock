@@ -12,12 +12,11 @@ func main() {
 	http.HandleFunc("/", defaultHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
-//postgres://postgres:1234@localhost/test_pg?sslmode=verify-full
 func defaultHandler(w http.ResponseWriter, _ *http.Request) {
 	fmt.Fprintln(w, "connecting to postgres")
 	db, err := sql.Open(
 		"postgres", 
-		"user=postgres password=1234 dbname=test_db host=pg_db sslmode=disable")
+		"user=test_user password=1234 dbname=test_db host=localhost sslmode=disable")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
